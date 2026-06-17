@@ -6,6 +6,15 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gym Split">
+<meta name="theme-color" content="#0f0f0f">
+<meta name="msapplication-TileColor" content="#0f0f0f">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+
+<!-- iOS splash screens -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>My Gym Split</title>
 <style>
   :root {
@@ -212,6 +221,15 @@ function renderContent(){
 
 renderSwitcher();
 renderContent();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/gym-split/sw.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW failed:', e));
+  });
+}
 </script>
 </body>
 </html>
