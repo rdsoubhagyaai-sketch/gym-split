@@ -41,8 +41,8 @@
   .card{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);overflow:hidden}
   .card:active{opacity:0.85}
   .img-wrap{width:100%;aspect-ratio:16/9;background:var(--surface2);position:relative;overflow:hidden}
-  .img-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.4s;position:absolute;top:0;left:0;z-index:1}
-  .img-wrap img.show{opacity:1}
+  .img-wrap video,.img-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.4s;position:absolute;top:0;left:0;z-index:1}
+  .img-wrap video.show,.img-wrap img.show{opacity:1}
   .gif-tag{position:absolute;top:8px;right:8px;z-index:2;font-size:9px;font-weight:700;background:var(--accent);color:#000;padding:2px 6px;border-radius:4px;opacity:0;transition:opacity 0.3s}
   .gif-tag.show{opacity:1}
   .placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:0}
@@ -149,10 +149,21 @@ function renderSwitcher(){
   });
 }
 
-function loadImg(img,tag,gif,fb){
-  img.src=gif;
-  img.onload=()=>{img.classList.add('show');if(tag)tag.classList.add('show')};
-  img.onerror=()=>{img.src=fb;img.onload=()=>img.classList.add('show');img.onerror=null};
+function loadImg(vid,tag,gif,fb){
+  // Use video element for autoplay on iOS Safari (avoids Low Power Mode block on img GIFs)
+  vid.src=gif;
+  vid.oncanplay=()=>{vid.classList.add('show');if(tag)tag.classList.add('show');vid.oncanplay=null};
+  vid.onerror=()=>{
+    // GIF failed — fall back to a regular img
+    const img=document.createElement('img');
+    img.alt=vid.alt||'';
+    img.src=fb;
+    img.style.cssText=vid.style.cssText;
+    img.className=vid.className;
+    img.onload=()=>img.classList.add('show');
+    vid.parentNode.replaceChild(img,vid);
+  };
+  vid.load();
 }
 
 function renderContent(){
@@ -180,7 +191,7 @@ function renderContent(){
         <div class="img-wrap">
           <div class="placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M12 6.5V17M8 17h8"/><circle cx="12" cy="12" r="10"/></svg></div>
           <span class="gif-tag" id="tag-${i}">GIF</span>
-          <img id="img-${i}" alt="${ex.name}"/>
+          <video id="img-${i}" autoplay muted loop playsinline disableRemotePlayback></video>
         </div>
         <div class="card-body">
           <div class="card-name">${ex.name}</div>
