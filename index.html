@@ -8,226 +8,714 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Gym Split">
 <meta name="theme-color" content="#0f0f0f">
-<meta name="msapplication-TileColor" content="#0f0f0f">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
-
-<!-- iOS splash screens -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>My Gym Split</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Gym Split</title>
 <style>
-  :root {
-    --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;
-    --border:rgba(255,255,255,0.07);--text:#f0f0f0;
-    --text2:#777;--text3:#444;--accent:#c8f060;
-    --strength:#60a5fa;--hyp:#86efac;
-    --radius:14px;--radius-sm:8px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overscroll-behavior:none}
-  .header{position:sticky;top:0;z-index:100;background:var(--bg);padding:48px 18px 0;border-bottom:0.5px solid var(--border)}
-  .header-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
-  .app-title{font-size:24px;font-weight:700;letter-spacing:-0.5px}
-  .app-date{font-size:12px;color:var(--text2);margin-top:3px}
-  .today-chip{font-size:11px;font-weight:600;color:var(--accent);background:rgba(200,240,96,0.1);padding:4px 10px;border-radius:20px;white-space:nowrap}
-  .switcher{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 18px 14px;margin:0 -18px}
-  .switcher::-webkit-scrollbar{display:none}
-  .day-btn{scroll-snap-align:start;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 14px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;min-width:52px;letter-spacing:0.03em}
-  .day-btn .dot{width:4px;height:4px;border-radius:50%;background:transparent}
-  .day-btn.today .dot{background:var(--accent)}
-  .day-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
-  .day-btn.active .dot{background:var(--bg)}
-  .day-btn.rest-day{opacity:0.38}
-  .content{padding:18px 16px 100px}
-  .session-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-  .session-name{font-size:19px;font-weight:700;letter-spacing:-0.3px}
-  .type-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:0.06em;text-transform:uppercase}
-  .b-strength{background:rgba(96,165,250,0.12);color:var(--strength)}
-  .b-hyp{background:rgba(134,239,172,0.12);color:var(--hyp)}
-  .ex-count{font-size:12px;color:var(--text3);margin-bottom:16px}
-  .grid{display:grid;grid-template-columns:1fr;gap:12px}
-  .card{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);overflow:hidden}
-  .card:active{opacity:0.85}
-  .img-wrap{width:100%;aspect-ratio:16/9;background:var(--surface2);position:relative;overflow:hidden}
-  .img-wrap video,.img-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.4s;position:absolute;top:0;left:0;z-index:1}
-  .img-wrap video.show,.img-wrap img.show{opacity:1}
-  .gif-tag{position:absolute;top:8px;right:8px;z-index:2;font-size:9px;font-weight:700;background:var(--accent);color:#000;padding:2px 6px;border-radius:4px;opacity:0;transition:opacity 0.3s}
-  .gif-tag.show{opacity:1}
-  .placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:0}
-  .placeholder svg{opacity:0.12}
-  .card-body{padding:11px 13px 13px}
-  .card-name{font-size:14px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:8px}
-  .card-foot{display:flex;align-items:center;justify-content:space-between;gap:4px}
-  .card-sets{font-size:12px;color:var(--accent);font-weight:700}
-  .card-muscle{font-size:10px;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:20px;white-space:nowrap}
-  .rest-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;gap:10px;padding:2rem}
-  .rest-icon{font-size:48px;margin-bottom:6px}
-  .rest-title{font-size:22px;font-weight:700}
-  .rest-sub{font-size:14px;color:var(--text2);line-height:1.6;max-width:270px}
-  .rest-note{margin-top:14px;font-size:12px;color:var(--text3);border:0.5px solid var(--border);padding:10px 16px;border-radius:var(--radius-sm);max-width:290px;line-height:1.5}
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--surface3:#2a2a2a;
+  --border:rgba(255,255,255,0.07);--text:#f0f0f0;--text2:#777;--text3:#444;
+  --accent:#c8f060;--accent-dim:rgba(200,240,96,0.1);
+  --rose:#f87171;--blue:#60a5fa;--yellow:#fbbf24;
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overscroll-behavior:none}
+.screen{display:none;flex-direction:column;height:100vh;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── ONBOARDING ── */
+#ob-screen{background:var(--bg);justify-content:flex-end}
+.ob-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.04;font-size:220px;pointer-events:none;user-select:none}
+.ob-inner{padding:0 24px 52px;position:relative;z-index:1}
+.ob-logo{width:52px;height:52px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:28px}
+.ob-title{font-size:30px;font-weight:800;letter-spacing:-0.8px;line-height:1.15;margin-bottom:10px}
+.ob-title span{color:var(--accent)}
+.ob-sub{font-size:14px;color:var(--text2);margin-bottom:36px;line-height:1.6}
+.ob-cards{display:flex;flex-direction:column;gap:10px}
+.ob-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color 0.15s,background 0.15s}
+.ob-card:active{background:var(--surface2)}
+.ob-card.highlight{border-color:var(--accent);background:rgba(200,240,96,0.04)}
+.ob-card-icon{font-size:26px;flex-shrink:0;width:44px;text-align:center}
+.ob-card-body{flex:1}
+.ob-card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px}
+.ob-card-sub{font-size:12px;color:var(--text2);line-height:1.4}
+.ob-card-arrow{color:var(--text3);font-size:20px;flex-shrink:0}
+
+/* ── LEVEL PICKER ── */
+#level-screen{background:var(--bg)}
+.level-inner{flex:1;overflow-y:auto;padding:56px 20px 32px}
+.back-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;margin-bottom:28px;background:none;border:none}
+.back-btn svg{opacity:0.5}
+.level-title{font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+.level-sub{font-size:13px;color:var(--text2);margin-bottom:28px;line-height:1.5}
+.level-cards{display:flex;flex-direction:column;gap:12px}
+.level-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:all 0.15s}
+.level-card:active{background:var(--surface2)}
+.level-card.selected{border-color:var(--accent)}
+.level-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.level-name{font-size:17px;font-weight:700;color:var(--text)}
+.level-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em}
+.badge-beg{background:rgba(96,165,250,0.12);color:var(--blue)}
+.badge-int{background:rgba(251,191,36,0.12);color:var(--yellow)}
+.badge-pro{background:rgba(200,240,96,0.12);color:var(--accent)}
+.level-desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px}
+.level-tags{display:flex;gap:6px;flex-wrap:wrap}
+.level-tag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;background:var(--surface2);color:var(--text3)}
+.level-cta{padding:16px 20px 44px}
+
+/* ── DAY PICKER ── */
+#day-screen{background:var(--bg)}
+.day-inner{flex:1;overflow-y:auto;padding:56px 20px 32px}
+.split-preview{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:24px;border:1px solid var(--border)}
+.split-preview-title{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.split-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.split-row:last-child{margin-bottom:0}
+.split-day-label{font-size:11px;font-weight:700;color:var(--text2);width:30px;flex-shrink:0}
+.split-focus{font-size:12px;font-weight:600;color:var(--text);flex:1}
+.split-type-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--text3)}
+.day-picker-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.day-picker-sub{font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.5}
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:24px}
+.day-toggle{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all 0.15s}
+.day-toggle span:first-child{font-size:10px;font-weight:700;color:var(--text2)}
+.day-toggle.on{background:var(--accent);border-color:var(--accent)}
+.day-toggle.on span{color:#000}
+.day-cta{padding:16px 20px 44px}
+
+/* ── CUSTOM BUILDER ── */
+#custom-screen{background:var(--bg)}
+.custom-inner{flex:1;overflow-y:auto;padding:56px 20px 32px}
+.custom-day-block{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:12px;border:1px solid var(--border)}
+.custom-day-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.custom-day-name{font-size:15px;font-weight:700;color:var(--text)}
+.rest-toggle{font-size:11px;font-weight:600;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:4px 10px;border-radius:20px;cursor:pointer}
+.rest-toggle.rest-on{color:var(--text3)}
+.focus-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.focus-chip{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all 0.15s}
+.focus-chip.on{background:var(--accent);color:#000;border-color:var(--accent)}
+.type-row{display:flex;gap:6px}
+.type-chip{flex:1;padding:7px;border-radius:var(--radius-xs);font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;text-align:center;transition:all 0.15s}
+.type-chip.on{background:var(--surface3);color:var(--text);border-color:rgba(255,255,255,0.15)}
+.custom-cta{padding:16px 20px 44px}
+
+/* ── MAIN APP ── */
+#main-screen{background:var(--bg)}
+.header{background:var(--bg);padding:52px 18px 0;border-bottom:1px solid var(--border);flex-shrink:0}
+.header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.app-title{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.app-date{font-size:11px;color:var(--text2);margin-top:2px}
+.edit-btn{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;background:var(--surface2);color:var(--text2);border:1px solid var(--border);cursor:pointer}
+.switcher{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 18px 14px;margin:0 -18px}
+.switcher::-webkit-scrollbar{display:none}
+.day-btn{scroll-snap-align:start;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;min-width:48px;transition:all 0.15s;letter-spacing:0.04em}
+.day-btn .focus-lbl{font-size:8px;font-weight:500;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44px;text-align:center}
+.day-btn .dot{width:3px;height:3px;border-radius:50%;background:transparent}
+.day-btn.today .dot{background:var(--accent)}
+.day-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.day-btn.active .focus-lbl{color:rgba(0,0,0,0.5)}
+.day-btn.active .dot{background:var(--bg)}
+.day-btn.rest-day{opacity:0.3}
+.content{flex:1;overflow-y:auto;padding:18px 16px 100px;-webkit-overflow-scrolling:touch}
+.session-hero{background:linear-gradient(135deg,#1a1a1a,#222);border-radius:var(--radius);padding:18px;margin-bottom:18px;border:1px solid var(--border);position:relative;overflow:hidden}
+.session-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--accent-dim)}
+.session-hero-day{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.session-hero-name{font-size:24px;font-weight:800;letter-spacing:-0.5px;color:var(--text);margin-bottom:10px}
+.session-hero-chips{display:flex;gap:8px}
+.hero-chip{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.06);color:var(--text2)}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:transform 0.1s}
+.card:active{transform:scale(0.98)}
+.img-wrap{width:100%;aspect-ratio:16/9;background:var(--surface2);position:relative;overflow:hidden}
+.img-wrap video,.img-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.4s;position:absolute;top:0;left:0;z-index:1}
+.img-wrap video.show,.img-wrap img.show{opacity:1}
+.tap-hint{position:absolute;bottom:8px;left:8px;z-index:2;font-size:9px;font-weight:600;background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.65);padding:2px 8px;border-radius:20px;backdrop-filter:blur(4px)}
+.placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:0}
+.placeholder svg{opacity:0.1}
+.card-body{padding:12px 14px 14px;display:flex;align-items:center;gap:8px}
+.card-info{flex:1}
+.card-name{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px}
+.card-sets{font-size:12px;color:var(--accent);font-weight:600}
+.card-muscle-tag{font-size:10px;color:var(--text3);background:var(--surface2);padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.chevron{color:var(--text3);font-size:18px;flex-shrink:0}
+.rest-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:10px;padding:2rem}
+.rest-icon{font-size:52px;margin-bottom:8px}
+.rest-title{font-size:24px;font-weight:800}
+.rest-sub{font-size:14px;color:var(--text2);line-height:1.6;max-width:270px}
+.rest-note{margin-top:16px;font-size:12px;color:var(--text3);border:1px solid var(--border);padding:12px 16px;border-radius:var(--radius-sm);max-width:290px;line-height:1.5}
+
+/* ── PANEL ── */
+.overlay{position:fixed;inset:0;background:transparent;z-index:200;pointer-events:none;transition:background 0.3s}
+.overlay.open{background:rgba(0,0,0,0.7);pointer-events:all}
+.panel{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:24px 24px 0 0;z-index:201;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.32,0.72,0,1);max-height:90vh;display:flex;flex-direction:column}
+.panel.open{transform:translateY(0)}
+.panel-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.panel-close{position:absolute;top:14px;right:16px;width:30px;height:30px;border-radius:50%;background:var(--surface2);border:none;color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.panel-body{overflow-y:auto;flex:1;padding:16px 20px 52px}
+.panel-gif{width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:var(--surface2);margin-bottom:18px;position:relative}
+.panel-gif video,.panel-gif img{width:100%;height:100%;object-fit:cover;display:block}
+.panel-ex-name{font-size:22px;font-weight:800;letter-spacing:-0.3px;color:var(--text);margin-bottom:4px}
+.panel-sets{font-size:14px;color:var(--accent);font-weight:600;margin-bottom:22px}
+.panel-section{margin-bottom:22px}
+.panel-section-title{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.muscle-chips{display:flex;flex-wrap:wrap;gap:6px}
+.muscle-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px}
+.mp{background:rgba(248,113,113,0.12);color:var(--rose)}
+.ms{background:rgba(255,255,255,0.05);color:var(--text2)}
+.force-box{background:var(--surface2);border-radius:var(--radius-sm);padding:14px 16px;border-left:3px solid var(--accent)}
+.force-box p{font-size:13px;color:var(--text2);line-height:1.7}
+.steps{list-style:none;display:flex;flex-direction:column;gap:12px}
+.steps li{display:flex;gap:12px;font-size:13px;color:var(--text2);line-height:1.55}
+.step-n{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--surface2);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+
+/* ── SHARED ── */
+.btn-primary{width:100%;padding:16px;border-radius:var(--radius);background:var(--accent);color:#000;font-size:16px;font-weight:700;border:none;cursor:pointer;letter-spacing:0.02em}
+.btn-primary:active{opacity:0.85}
+.btn-ghost{width:100%;padding:12px;border-radius:var(--radius);background:transparent;color:var(--text2);font-size:14px;font-weight:600;border:1px solid var(--border);cursor:pointer;margin-top:10px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
 </style>
 </head>
 <body>
-<div class="header">
-  <div class="header-row">
-    <div>
-      <div class="app-title">My Gym Split</div>
-      <div class="app-date" id="date-lbl"></div>
+
+<!-- ONBOARDING -->
+<div id="ob-screen" class="screen">
+  <div class="ob-bg">🏋️</div>
+  <div class="ob-inner">
+    <div class="ob-logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M12 6.5V17M8 17h8"/><circle cx="12" cy="12" r="10"/></svg>
     </div>
-    <div class="today-chip" id="today-chip"></div>
+    <div class="ob-title">Your gym.<br><span>Your split.</span></div>
+    <div class="ob-sub">Pick how you want to get started. You can change everything later.</div>
+    <div class="ob-cards">
+      <div class="ob-card highlight" onclick="goCustom()">
+        <div class="ob-card-icon">🛠</div>
+        <div class="ob-card-body">
+          <div class="ob-card-title">Build my own</div>
+          <div class="ob-card-sub">Choose your days, set your focus, define your split from scratch.</div>
+        </div>
+        <div class="ob-card-arrow">›</div>
+      </div>
+      <div class="ob-card" onclick="goLevel()">
+        <div class="ob-card-icon">⚡</div>
+        <div class="ob-card-body">
+          <div class="ob-card-title">Load by level</div>
+          <div class="ob-card-sub">Beginner, Intermediate, or Pro — get a proven split auto-loaded.</div>
+        </div>
+        <div class="ob-card-arrow">›</div>
+      </div>
+      <div class="ob-card" onclick="goRandom()">
+        <div class="ob-card-icon">🎲</div>
+        <div class="ob-card-body">
+          <div class="ob-card-title">Surprise me</div>
+          <div class="ob-card-sub">Pick a random split from our curated templates.</div>
+        </div>
+        <div class="ob-card-arrow">›</div>
+      </div>
+    </div>
   </div>
-  <div class="switcher" id="switcher"></div>
 </div>
-<div class="content" id="content"></div>
+
+<!-- LEVEL PICKER -->
+<div id="level-screen" class="screen">
+  <div class="level-inner">
+    <button class="back-btn" onclick="showScreen('ob-screen')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="level-title">Pick your level</div>
+    <div class="level-sub">Be honest. The right split for your level gives better results than the one that looks impressive.</div>
+    <div class="level-cards" id="level-cards"></div>
+  </div>
+  <div class="level-cta">
+    <button class="btn-primary" onclick="confirmLevel()">Load this split →</button>
+  </div>
+</div>
+
+<!-- DAY PICKER (for level splits) -->
+<div id="day-screen" class="screen">
+  <div class="day-inner">
+    <button class="back-btn" id="back-btn-day" onclick="showScreen('level-screen')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="level-title" id="day-screen-title">Choose your days</div>
+    <div class="level-sub">The split structure stays fixed. Just map which days you train.</div>
+    <div class="split-preview" id="split-preview"></div>
+    <div class="day-picker-title">Which days do you train?</div>
+    <div class="day-picker-sub">Select exactly the number of days this split needs. Rest days fill in automatically.</div>
+    <div class="day-grid" id="day-grid"></div>
+  </div>
+  <div class="day-cta">
+    <button class="btn-primary" onclick="confirmDays()">Start training →</button>
+  </div>
+</div>
+
+<!-- CUSTOM BUILDER -->
+<div id="custom-screen" class="screen">
+  <div class="custom-inner">
+    <button class="back-btn" onclick="showScreen('ob-screen')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="level-title">Build your split</div>
+    <div class="level-sub">Set a focus and type for each day. Exercises are auto-assigned — you can swap them later.</div>
+    <div id="custom-blocks"></div>
+  </div>
+  <div class="custom-cta">
+    <button class="btn-primary" onclick="saveCustom()">Save split →</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-screen" class="screen">
+  <div class="header">
+    <div class="header-row">
+      <div>
+        <div class="app-title">Gym Split</div>
+        <div class="app-date" id="date-lbl"></div>
+      </div>
+      <button class="edit-btn" onclick="showScreen('ob-screen')">Edit split</button>
+    </div>
+    <div class="switcher" id="switcher"></div>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+
+<!-- PANEL -->
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+<div class="panel" id="panel">
+  <div class="panel-handle"></div>
+  <button class="panel-close" onclick="closePanel()">×</button>
+  <div class="panel-body" id="panel-body"></div>
+</div>
+
 <script>
 const GIF = 'https://static.exercisedb.dev/media/';
 const FB  = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
-const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const STORE = 'gymSplit_v3';
+const DAYS  = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+const JSDAYS= ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const FOCUS_OPTS = ['Push','Pull','Legs','Upper','Lower','Chest','Back','Shoulders','Arms','Full Body'];
 
-const SPLIT = {
-  MON:{label:'Upper — Strength',type:'strength',exercises:[
-    {name:'Barbell Bench Press',        sets:'4 × 4–6',        muscle:'Chest',      gif:GIF+'EIeI8Vf.gif', fb:FB+'Barbell_Bench_Press_-_Medium_Grip/0.jpg'},
-    {name:'Weighted Pull-ups / BB Row', sets:'4 × 4–6',        muscle:'Back',       gif:GIF+'lBDjFxJ.gif', fb:FB+'Pullups/0.jpg'},
-    {name:'Overhead Press',             sets:'3 × 5–7',        muscle:'Shoulders',  gif:GIF+'A6wtbuL.gif', fb:FB+'Barbell_Shoulder_Press/0.jpg'},
-    {name:'Dips',                       sets:'3 × 6–8',        muscle:'Triceps',    gif:GIF+'J60bN17.gif', fb:FB+'Dips_-_Triceps_Version/0.jpg'},
-    {name:'Chin-ups',                   sets:'3 × 6–8',        muscle:'Biceps',     gif:GIF+'T2mxWqc.gif', fb:FB+'Chin-Up/0.jpg'},
-    {name:'Face Pulls',                 sets:'3 × 10–12',      muscle:'Rear Delts', gif:GIF+'G61cXLk.gif', fb:FB+'Face_Pull/0.jpg'},
-  ]},
-  TUE:{label:'Lower — Strength',type:'strength',exercises:[
-    {name:'Barbell Squat',              sets:'4 × 4–6',        muscle:'Quads',      gif:GIF+'EIeI8Vf.gif', fb:FB+'Barbell_Full_Squat/0.jpg'},
-    {name:'Romanian Deadlift',          sets:'4 × 5–7',        muscle:'Hamstrings', gif:GIF+'wQ2c4XD.gif', fb:FB+'Romanian_Deadlift/0.jpg'},
-    {name:'Leg Press',                  sets:'3 × 6–8',        muscle:'Quads',      gif:GIF+'yn2lLSI.gif', fb:FB+'Leg_Press/0.jpg'},
-    {name:'Standing Calf Raise',        sets:'4 × 8–10',       muscle:'Calves',     gif:GIF+'6HiHHe0.gif', fb:FB+'Calf_Press_On_The_Leg_Press_Machine/0.jpg'},
-    {name:'Plank',                      sets:'3 × 45–60 sec',  muscle:'Core',       gif:GIF+'VBAWRPG.gif', fb:FB+'Plank/0.jpg'},
-  ]},
-  WED:null,
-  THU:{label:'Push — Hypertrophy',type:'hypertrophy',exercises:[
-    {name:'Incline Dumbbell Press',     sets:'4 × 8–10',       muscle:'Chest',      gif:GIF+'ns0SIbU.gif', fb:FB+'Incline_Dumbbell_Press/0.jpg'},
-    {name:'Machine Bench / Flat DB',    sets:'3 × 10–12',      muscle:'Chest',      gif:GIF+'EIeI8Vf.gif', fb:FB+'Barbell_Bench_Press_-_Medium_Grip/0.jpg'},
-    {name:'Lateral Raise',              sets:'4 × 12–15',      muscle:'Shoulders',  gif:GIF+'DsgkuIt.gif', fb:FB+'Seated_Side_Lateral_Raise/0.jpg'},
-    {name:'Overhead Triceps Extension', sets:'3 × 10–12',      muscle:'Triceps',    gif:GIF+'2IxROQ1.gif', fb:FB+'Cable_Rope_Overhead_Triceps_Extension/0.jpg'},
-    {name:'Triceps Pushdown',           sets:'3 × 12–15',      muscle:'Triceps',    gif:GIF+'gAwDzB3.gif', fb:FB+'Triceps_Pushdown/0.jpg'},
-    {name:'Pec Fly',                    sets:'3 × 12–15',      muscle:'Chest',      gif:GIF+'w4dLzSx.gif', fb:FB+'Cable_Crossover/0.jpg'},
-  ]},
-  FRI:{label:'Pull — Hypertrophy',type:'hypertrophy',exercises:[
-    {name:'Lat Pulldown',               sets:'4 × 10–12',      muscle:'Back',       gif:GIF+'rkg41Fb.gif', fb:FB+'Close-Grip_Front_Lat_Pulldown/0.jpg'},
-    {name:'Barbell / DB Row',           sets:'4 × 8–10',       muscle:'Back',       gif:GIF+'eZyBC3j.gif', fb:FB+'Bent_Over_Barbell_Row/0.jpg'},
-    {name:'Seated Cable Row',           sets:'3 × 10–12',      muscle:'Back',       gif:GIF+'fUBheHs.gif', fb:FB+'Seated_Cable_Rows/0.jpg'},
-    {name:'Face Pulls',                 sets:'3 × 15–20',      muscle:'Rear Delts', gif:GIF+'wqNPGCg.gif', fb:FB+'Face_Pull/0.jpg'},
-    {name:'Barbell Curl',               sets:'4 × 10–12',      muscle:'Biceps',     gif:GIF+'25GPyDY.gif', fb:FB+'Barbell_Curl/0.jpg'},
-    {name:'Hammer Curl',                sets:'3 × 12–15',      muscle:'Biceps',     gif:GIF+'GNhAeJ0.gif', fb:FB+'Alternate_Hammer_Curl/0.jpg'},
-    {name:'Reverse Fly',                sets:'3 × 15–20',      muscle:'Rear Delts', gif:GIF+'prbWx1D.gif', fb:FB+'Reverse_Flyes/0.jpg'},
-  ]},
-  SAT:{label:'Legs — Hypertrophy',type:'hypertrophy',exercises:[
-    {name:'Front Squat / Goblet Squat', sets:'4 × 8–10',       muscle:'Quads',      gif:GIF+'ZA8b5hc.gif', fb:FB+'Goblet_Squat/0.jpg'},
-    {name:'Leg Curl',                   sets:'4 × 10–12',      muscle:'Hamstrings', gif:GIF+'17lJ1kr.gif', fb:FB+'Lying_Leg_Curls/0.jpg'},
-    {name:'Leg Extension',              sets:'3 × 12–15',      muscle:'Quads',      gif:GIF+'my33uHU.gif', fb:FB+'Leg_Extensions/0.jpg'},
-    {name:'Hip Thrust / Glute Bridge',  sets:'4 × 10–12',      muscle:'Glutes',     gif:GIF+'Pjbc0Kt.gif', fb:FB+'Barbell_Hip_Thrust/0.jpg'},
-    {name:'Walking Lunge',              sets:'3 × 12–16 steps', muscle:'Quads',     gif:GIF+'IZVHb27.gif', fb:FB+'Bodyweight_Walking_Lunge/0.jpg'},
-    {name:'Seated Calf Raise',          sets:'4 × 12–15',      muscle:'Calves',     gif:GIF+'bOOdeyc.gif', fb:FB+'Seated_Calf_Raise/0.jpg'},
-  ]},
-  SUN:null,
+// ── EXERCISE LIBRARY ─────────────────────────────────────────────────────────
+const EX = {
+  bench:       {name:'Barbell Bench Press',        sets:'4×4–6',   muscle:'Chest',      gif:GIF+'EIeI8Vf.gif',fb:FB+'Barbell_Bench_Press_-_Medium_Grip/0.jpg',primary:['Pectorals'],secondary:['Triceps','Anterior Deltoid'],cue:'Feel the stretch deep in your chest at the bottom. Drive through your chest — not shoulders — on the way up.',steps:['Lie flat, feet planted, back naturally arched.','Grip just outside shoulder width, thumbs wrapped.','Lower to mid-chest in 2–3 sec.','Pause, then press explosively.','Lock out without shrugging shoulders up.']},
+  pullup:      {name:'Weighted Pull-ups',           sets:'4×4–6',   muscle:'Back',       gif:GIF+'lBDjFxJ.gif',fb:FB+'Pullups/0.jpg',primary:['Latissimus Dorsi'],secondary:['Biceps','Rear Deltoid'],cue:'Initiate by pulling shoulder blades DOWN and BACK before arms bend. Elbows to hips — not hands to shoulders.',steps:['Dead hang, slight forward lean.','Depress scapula first.','Drive elbows down toward hip pockets.','Chin clears bar — hold 1 sec.','Lower fully — no half reps.']},
+  ohp:         {name:'Overhead Press',              sets:'3×5–7',   muscle:'Shoulders',  gif:GIF+'A6wtbuL.gif',fb:FB+'Barbell_Shoulder_Press/0.jpg',primary:['Anterior Deltoid','Medial Deltoid'],secondary:['Triceps'],cue:'Force straight overhead — wrist through elbow through shoulder. If lower back arches, your core is the weak link.',steps:['Bar at upper chest, elbows slightly forward.','Brace core hard.','Press straight up, head moves back.','Lock out overhead, biceps by ears.','Lower controlled.']},
+  dips:        {name:'Dips',                        sets:'3×6–8',   muscle:'Triceps',    gif:GIF+'J60bN17.gif',fb:FB+'Dips_-_Triceps_Version/0.jpg',primary:['Triceps'],secondary:['Lower Pectorals'],cue:'Keep torso upright, elbows close. Feel the squeeze at the top behind the elbow — that is the tricep contracting.',steps:['Grip parallel bars, arms extended.','Keep torso vertical.','Lower to 90°, elbows tracking back.','Press up without shrugging.','Full lockout at top.']},
+  chinup:      {name:'Chin-ups',                    sets:'3×6–8',   muscle:'Biceps',     gif:GIF+'T2mxWqc.gif',fb:FB+'Chin-Up/0.jpg',primary:['Biceps Brachii'],secondary:['Latissimus Dorsi'],cue:'Squeeze the bar hard and feel the bicep fully contract at the top. Avoid swinging — momentum steals your gains.',steps:['Underhand grip, shoulder width.','Pull chest toward bar.','Feel peak bicep contraction at top.','Lower fully — dead hang.','No kipping — strict reps only.']},
+  facepull:    {name:'Face Pulls',                  sets:'3×10–12', muscle:'Rear Delts', gif:GIF+'G61cXLk.gif',fb:FB+'Face_Pull/0.jpg',primary:['Rear Deltoid'],secondary:['External Rotators','Rhomboids'],cue:'Pull to your FACE — elbows end up above shoulders. Feel a deep squeeze between shoulder blades and back of shoulder.',steps:['Cable at face height, rope attachment.','Grip rope, thumbs pointing back.','Pull toward forehead — elbows flare high.','Hold 2 sec at peak.','Return slowly.']},
+  squat:       {name:'Barbell Squat',               sets:'4×4–6',   muscle:'Quads',      gif:GIF+'EIeI8Vf.gif',fb:FB+'Barbell_Full_Squat/0.jpg',primary:['Quadriceps'],secondary:['Glutes','Hamstrings'],cue:'Force is pushing the floor away. Knees track over toes. Feel quads most on the way up from the hole.',steps:['Bar on upper traps, shoulder-width stance.','Brace 360° — air into belly.','Break at hips and knees simultaneously.','Hit depth — hip crease below knee.','Drive floor away, keep chest tall.']},
+  rdl:         {name:'Romanian Deadlift',           sets:'4×5–7',   muscle:'Hamstrings', gif:GIF+'wQ2c4XD.gif',fb:FB+'Romanian_Deadlift/0.jpg',primary:['Hamstrings'],secondary:['Glutes','Spinal Erectors'],cue:'Feel a deep STRETCH in your hamstrings. If you feel it in your lower back, you are rounding. Push hips BACK, not down.',steps:['Start standing, hip-width.','Soft bend in knees — do not squat.','Hinge at hips, push them back.','Lower bar until hamstring stretch is strong.','Drive hips forward — squeeze glutes at top.']},
+  legpress:    {name:'Leg Press',                   sets:'3×6–8',   muscle:'Quads',      gif:GIF+'yn2lLSI.gif',fb:FB+'Leg_Press/0.jpg',primary:['Quadriceps'],secondary:['Glutes'],cue:'Low foot = more quad. High foot = more glute. Never let lower back peel off the pad.',steps:['Feet shoulder width, mid-platform.','Lower without back rounding.','Stop at 90°.','Press through full foot.','Do not fully lock knees at top.']},
+  calfstand:   {name:'Standing Calf Raise',         sets:'4×8–10',  muscle:'Calves',     gif:GIF+'6HiHHe0.gif',fb:FB+'Calf_Press_On_The_Leg_Press_Machine/0.jpg',primary:['Gastrocnemius'],secondary:['Soleus'],cue:'Full 2-sec stretch at bottom, 1-sec hold at top. Feel burn in belly of calf — not Achilles.',steps:['Balls of feet on edge of platform.','Full stretch — 2 sec hold.','Rise onto toes as high as possible.','Squeeze at top — 1 sec.','Do not bounce.']},
+  plank:       {name:'Plank',                       sets:'3×45–60s',muscle:'Core',       gif:GIF+'VBAWRPG.gif',fb:FB+'Plank/0.jpg',primary:['Rectus Abdominis','Transverse Abdominis'],secondary:['Obliques'],cue:'Squeeze abs, glutes, and quads simultaneously. One rigid plank from head to heels.',steps:['Forearms down, elbows under shoulders.','Squeeze glutes, quads, and abs.','Hips level — not sagging or raised.','Breathe — do not hold breath.','Stop when form breaks.']},
+  incline:     {name:'Incline Dumbbell Press',      sets:'4×8–10',  muscle:'Chest',      gif:GIF+'ns0SIbU.gif',fb:FB+'Incline_Dumbbell_Press/0.jpg',primary:['Upper Pectorals'],secondary:['Anterior Deltoid','Triceps'],cue:'Set bench 30–45°. Feel upper chest stretch at bottom. Drive dumbbells together at top.',steps:['Bench 30–45°, dumbbells at shoulder.','Lower with full stretch.','Press up and slightly inward.','Squeeze upper chest at top.','Lower controlled — 3 sec.']},
+  lateral:     {name:'Lateral Raise',               sets:'4×12–15', muscle:'Shoulders',  gif:GIF+'DsgkuIt.gif',fb:FB+'Seated_Side_Lateral_Raise/0.jpg',primary:['Medial Deltoid'],secondary:['Supraspinatus'],cue:'Force in the side of shoulder. Lead with elbows. If you feel it in traps, you are shrugging.',steps:['Slight forward lean, soft elbow bend.','Lead with elbows — not hands.','Raise to shoulder height only.','Pinky slightly higher than thumb.','Lower slowly — 3 sec.']},
+  triext:      {name:'Overhead Triceps Extension',  sets:'3×10–12', muscle:'Triceps',    gif:GIF+'2IxROQ1.gif',fb:FB+'Cable_Rope_Overhead_Triceps_Extension/0.jpg',primary:['Triceps Long Head'],secondary:['Triceps Lateral Head'],cue:'Deep stretch above elbow at bottom. Keep elbows pointed forward — not flaring out.',steps:['Elbows framing face.','Lower behind head until stretch is felt.','Extend arms fully overhead.','Squeeze at lockout — 1 sec.','Elbows stay fixed.']},
+  pushdown:    {name:'Triceps Pushdown',            sets:'3×12–15', muscle:'Triceps',    gif:GIF+'gAwDzB3.gif',fb:FB+'Triceps_Pushdown/0.jpg',primary:['Triceps Lateral Head'],secondary:['Triceps Medial Head'],cue:'Feel contraction at bottom — arms fully extended. Upper arms pinned to sides.',steps:['Cable at upper pulley.','Upper arms pinned — do not move them.','Press down until arms extended.','Squeeze at bottom — 1 sec.','Return to 90°.']},
+  pecfly:      {name:'Pec Fly',                     sets:'3×12–15', muscle:'Chest',      gif:GIF+'w4dLzSx.gif',fb:FB+'Cable_Crossover/0.jpg',primary:['Pectorals'],secondary:['Anterior Deltoid'],cue:'Massive stretch at bottom, deep squeeze in centre of chest at top. Think: hugging a tree.',steps:['Cables at shoulder height.','Soft elbow bend — fix it there.','Open arms wide — full stretch.','Bring hands together.','Squeeze 2 sec at peak.']},
+  latpull:     {name:'Lat Pulldown',                sets:'4×10–12', muscle:'Back',       gif:GIF+'rkg41Fb.gif',fb:FB+'Close-Grip_Front_Lat_Pulldown/0.jpg',primary:['Latissimus Dorsi'],secondary:['Biceps','Teres Major'],cue:'Pull to upper chest. Feel the lats — muscles under your armpits — doing the work.',steps:['Grip slightly wider than shoulders.','Lean back 15–20°.','Pull bar to upper chest.','Squeeze lats at bottom.','Return fully — arms straight.']},
+  bbrow:       {name:'Barbell Row',                 sets:'4×8–10',  muscle:'Back',       gif:GIF+'eZyBC3j.gif',fb:FB+'Bent_Over_Barbell_Row/0.jpg',primary:['Rhomboids','Middle Trapezius'],secondary:['Latissimus Dorsi','Biceps'],cue:'Pull to lower chest. Keep torso from swinging — power from pulling, not body English.',steps:['Hip hinge to 45°.','Back flat throughout.','Pull to lower sternum — elbows scrape sides.','Squeeze shoulder blades at top.','Lower fully.']},
+  cablerow:    {name:'Seated Cable Row',            sets:'3×10–12', muscle:'Back',       gif:GIF+'fUBheHs.gif',fb:FB+'Seated_Cable_Rows/0.jpg',primary:['Middle Trapezius','Rhomboids'],secondary:['Latissimus Dorsi'],cue:'Feel middle of back — between shoulder blades. Sit tall, do not lean back to move weight.',steps:['Sit tall, slight lean to start.','Pull to lower ribs — sit up simultaneously.','Squeeze shoulder blades hard.','Do not lean back past vertical.','Return slowly.']},
+  bpcurl:      {name:'Barbell Curl',                sets:'4×10–12', muscle:'Biceps',     gif:GIF+'25GPyDY.gif',fb:FB+'Barbell_Curl/0.jpg',primary:['Biceps Brachii'],secondary:['Brachialis'],cue:'Elbows stay pinned to sides. Lower slowly — the eccentric is where biceps grow.',steps:['Standing, underhand grip.','Pin elbows — do not move them.','Curl in an arc — no swing.','Squeeze at top.','Lower over 3 sec.']},
+  hammer:      {name:'Hammer Curl',                 sets:'3×12–15', muscle:'Biceps',     gif:GIF+'GNhAeJ0.gif',fb:FB+'Alternate_Hammer_Curl/0.jpg',primary:['Brachialis','Brachioradialis'],secondary:['Biceps Brachii'],cue:'Neutral grip targets brachialis which sits under the bicep and pushes it up. Feel the outer forearm and deep inner upper arm.',steps:['Dumbbells at sides, palms facing each other.','Keep neutral wrist throughout.','Curl up — elbow stays pinned.','Squeeze, lower over 2–3 sec.','Alternate or simultaneous.']},
+  revfly:      {name:'Reverse Fly',                 sets:'3×15–20', muscle:'Rear Delts', gif:GIF+'prbWx1D.gif',fb:FB+'Reverse_Flyes/0.jpg',primary:['Rear Deltoid'],secondary:['Rhomboids','Middle Trapezius'],cue:'Go light. Feel the burn in the very back of your shoulder at the top. Keep traps out of it.',steps:['Hinge forward 45°.','Soft elbow bend — fixed.','Raise arms to shoulder height.','Squeeze rear delts — 1 sec.','Lower slowly.']},
+  goblet:      {name:'Goblet Squat',                sets:'4×8–10',  muscle:'Quads',      gif:GIF+'ZA8b5hc.gif',fb:FB+'Goblet_Squat/0.jpg',primary:['Quadriceps'],secondary:['Glutes','Core'],cue:'More upright torso = more quad emphasis. Feel burn in front of thigh, especially the VMO near the knee.',steps:['Hold dumbbell at chest, elbows high.','Squat deep — knees tracking toes.','Feel quad stretch at bottom.','Drive up through heels.','Squeeze quads at top.']},
+  legcurl:     {name:'Leg Curl',                    sets:'4×10–12', muscle:'Hamstrings', gif:GIF+'17lJ1kr.gif',fb:FB+'Lying_Leg_Curls/0.jpg',primary:['Biceps Femoris','Semitendinosus'],secondary:['Gastrocnemius'],cue:'Curl slow, squeeze hard, lower slowly. Feel back of thigh burning — not calf.',steps:['Lie face down, pad above heel.','Curl legs — do not lift hips.','Squeeze hard — 2 sec hold.','Lower over 3 sec.','Full extension at bottom.']},
+  legext:      {name:'Leg Extension',               sets:'3×12–15', muscle:'Quads',      gif:GIF+'my33uHU.gif',fb:FB+'Leg_Extensions/0.jpg',primary:['Quadriceps'],secondary:['Rectus Femoris'],cue:'Sit all the way back. Feel front of thigh burning intensely. Hold at top — do not bounce.',steps:['Sit fully back, pad above ankle.','Extend legs fully — lock out.','Hold at top 1–2 sec.','Lower over 3 sec.','Do not slam at bottom.']},
+  hipthrust:   {name:'Hip Thrust',                  sets:'4×10–12', muscle:'Glutes',     gif:GIF+'Pjbc0Kt.gif',fb:FB+'Barbell_Hip_Thrust/0.jpg',primary:['Gluteus Maximus'],secondary:['Hamstrings','Adductors'],cue:'Chin to chest, ribs down. Squeeze glutes as hard as possible at top — not just extend hips.',steps:['Upper back on bench, bar across hip crease.','Feet flat, hip width, shins vertical at top.','Drive hips up — squeeze glutes HARD.','Hold 1–2 sec — pelvis neutral.','Lower controlled.']},
+  lunge:       {name:'Walking Lunge',               sets:'3×12–16s',muscle:'Quads',      gif:GIF+'IZVHb27.gif',fb:FB+'Bodyweight_Walking_Lunge/0.jpg',primary:['Quadriceps','Glutes'],secondary:['Hamstrings'],cue:'Front knee is load-bearing. Track over second toe. Feel front quad and glute working hard.',steps:['Step forward with one leg.','Lower back knee toward floor.','Front shin stays vertical.','Drive through front heel.','Step forward with rear leg.']},
+  calfseated:  {name:'Seated Calf Raise',           sets:'4×12–15', muscle:'Calves',     gif:GIF+'bOOdeyc.gif',fb:FB+'Seated_Calf_Raise/0.jpg',primary:['Soleus'],secondary:['Gastrocnemius'],cue:'Seated targets soleus — deeper and ignored. Full range. Slow it down — calves are stubborn.',steps:['Pad across lower thighs, balls of feet on edge.','Full stretch — 2 sec hold.','Rise as high as possible.','Squeeze at top — 2 sec.','Lower slowly.']},
+  pushup:      {name:'Push-ups',                    sets:'3×10–15', muscle:'Chest',      gif:GIF+'EIeI8Vf.gif',fb:FB+'Barbell_Bench_Press_-_Medium_Grip/0.jpg',primary:['Pectorals'],secondary:['Triceps','Anterior Deltoid'],cue:'Body in a straight line. Feel chest stretch at bottom. Drive through chest — not shoulders.',steps:['Hands shoulder-width, wrists under shoulders.','Body straight from head to heels.','Lower chest to floor — 2 sec.','Press up explosively.','Full lockout at top.']},
+  dbrow:       {name:'Dumbbell Row',                sets:'3×10–12', muscle:'Back',       gif:GIF+'eZyBC3j.gif',fb:FB+'Bent_Over_Barbell_Row/0.jpg',primary:['Latissimus Dorsi','Rhomboids'],secondary:['Biceps'],cue:'Drive elbow back toward hip — not up. Feel the lat on the same side doing the work.',steps:['One knee and hand on bench.','Back flat, parallel to floor.','Pull dumbbell to hip.','Squeeze lat at top.','Lower fully — full stretch.']},
+  lungefwd:    {name:'Forward Lunge',               sets:'3×10ea', muscle:'Legs',       gif:GIF+'IZVHb27.gif',fb:FB+'Bodyweight_Walking_Lunge/0.jpg',primary:['Quadriceps','Glutes'],secondary:['Hamstrings'],cue:'Control the descent. Front knee tracks toes. Beginner tip: use bodyweight before adding load.',steps:['Stand tall, feet together.','Step forward, lower back knee.','Front thigh parallel to floor.','Push back to start.','Alternate legs.']},
+  glute:       {name:'Glute Bridge',                sets:'3×15',    muscle:'Glutes',     gif:GIF+'Pjbc0Kt.gif',fb:FB+'Barbell_Hip_Thrust/0.jpg',primary:['Gluteus Maximus'],secondary:['Hamstrings'],cue:'Squeeze at the top — fully contract your glutes. This is not a hip extension drill, it is a glute contraction drill.',steps:['Lie on back, knees bent, feet flat.','Drive hips up through heels.','Squeeze glutes hard at top.','Hold 2 sec.','Lower slowly.']},
+  calfwalk:    {name:'Calf Walk',                   sets:'3×20s',   muscle:'Calves',     gif:GIF+'6HiHHe0.gif',fb:FB+'Calf_Press_On_The_Leg_Press_Machine/0.jpg',primary:['Gastrocnemius','Soleus'],secondary:[],cue:'Walk on your toes for distance or time. Keep heels off the floor entirely.',steps:['Rise onto toes.','Walk forward maintaining toe position.','Keep core engaged.','20–30 steps per set.','Lower heels to rest between sets.']},
 };
 
-const REST_NOTES={
-  WED:'Non-negotiable. Mon + Tue are back-to-back strength days — your CNS needs this.',
-  SUN:'Full reset. Prioritise sleep, a big meal, and zero gym guilt.'
-};
+// ── LEVEL TEMPLATES ─────────────────────────────────────────────────────────
+const LEVELS = [
+  {
+    id:'beginner',name:'Beginner',badge:'badge-beg',
+    desc:'0–1 year training. 3 full-body sessions per week. Focus on learning movement patterns and building base strength. Low volume, compound-heavy.',
+    tags:['3 days/week','Full Body','Compound focus','Low volume'],
+    daysNeeded:3,
+    structure:[
+      {label:'Full Body A',type:'strength',  keys:['squat','bench','dbrow','ohp','plank']},
+      {label:'Full Body B',type:'strength',  keys:['rdl','pushup','latpull','lateral','glute']},
+      {label:'Full Body C',type:'hypertrophy',keys:['goblet','incline','cablerow','hammer','calfstand']},
+    ]
+  },
+  {
+    id:'intermediate',name:'Intermediate',badge:'badge-int',
+    desc:'1–3 years training. 4 days/week Upper/Lower split. Higher volume, mix of strength and hypertrophy. You know the movements — now you load them.',
+    tags:['4 days/week','Upper / Lower','Strength + Hypertrophy','Moderate volume'],
+    daysNeeded:4,
+    structure:[
+      {label:'Upper Strength',  type:'strength',    keys:['bench','bbrow','ohp','chinup','dips','facepull']},
+      {label:'Lower Strength',  type:'strength',    keys:['squat','rdl','legpress','calfstand','plank']},
+      {label:'Upper Hypertrophy',type:'hypertrophy',keys:['incline','latpull','lateral','triext','bpcurl','revfly']},
+      {label:'Lower Hypertrophy',type:'hypertrophy',keys:['goblet','legcurl','legext','hipthrust','lunge','calfseated']},
+    ]
+  },
+  {
+    id:'pro',name:'Pro',badge:'badge-pro',
+    desc:'3+ years. 5-day Strength + Hypertrophy split. The same split used in this app. Hits every muscle twice per week across strength and hypertrophy rep ranges.',
+    tags:['5 days/week','Str + Hyp','Every muscle 2×/week','High volume'],
+    daysNeeded:5,
+    structure:[
+      {label:'Upper Strength',  type:'strength',    keys:['bench','pullup','ohp','dips','chinup','facepull']},
+      {label:'Lower Strength',  type:'strength',    keys:['squat','rdl','legpress','calfstand','plank']},
+      {label:'Push Hypertrophy',type:'hypertrophy', keys:['incline','bench','lateral','triext','pushdown','pecfly']},
+      {label:'Pull Hypertrophy',type:'hypertrophy', keys:['latpull','bbrow','cablerow','facepull','bpcurl','hammer','revfly']},
+      {label:'Legs Hypertrophy',type:'hypertrophy', keys:['goblet','legcurl','legext','hipthrust','lunge','calfseated']},
+    ]
+  }
+];
 
-const todayIdx=new Date().getDay();
-const todayKey=DAYS[todayIdx];
-let selected=todayKey;
+const RANDOM_TEMPLATES = [
+  {name:'PPL 6-Day',structure:[
+    {label:'Push',type:'strength',    keys:['bench','ohp','incline','lateral','triext','pushdown']},
+    {label:'Pull',type:'strength',    keys:['pullup','bbrow','facepull','bpcurl','hammer','revfly']},
+    {label:'Legs',type:'strength',    keys:['squat','rdl','legpress','legcurl','calfstand','plank']},
+    {label:'Push',type:'hypertrophy', keys:['incline','pecfly','lateral','pushdown','triext']},
+    {label:'Pull',type:'hypertrophy', keys:['latpull','cablerow','facepull','bpcurl','hammer']},
+    {label:'Legs',type:'hypertrophy', keys:['goblet','legext','legcurl','hipthrust','calfseated']},
+  ],daysNeeded:6},
+  {name:'Bro Split',structure:[
+    {label:'Chest + Tri', type:'hypertrophy',keys:['bench','incline','pecfly','triext','pushdown','dips']},
+    {label:'Back + Bi',   type:'hypertrophy',keys:['pullup','bbrow','latpull','cablerow','bpcurl','hammer']},
+    {label:'Shoulders',   type:'hypertrophy',keys:['ohp','lateral','facepull','revfly']},
+    {label:'Legs',        type:'hypertrophy',keys:['squat','rdl','legpress','legcurl','legext','calfstand']},
+    {label:'Arms',        type:'hypertrophy',keys:['bpcurl','hammer','triext','pushdown','chinup','dips']},
+  ],daysNeeded:5},
+  {name:'Upper/Lower 4-Day',structure:[
+    {label:'Upper Strength',   type:'strength',    keys:['bench','pullup','ohp','chinup','dips','facepull']},
+    {label:'Lower Strength',   type:'strength',    keys:['squat','rdl','legpress','calfstand','plank']},
+    {label:'Upper Hypertrophy',type:'hypertrophy', keys:['incline','latpull','lateral','triext','bpcurl','revfly']},
+    {label:'Lower Hypertrophy',type:'hypertrophy', keys:['goblet','legcurl','legext','hipthrust','lunge','calfseated']},
+  ],daysNeeded:4},
+];
 
-document.getElementById('date-lbl').textContent=
-  new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+// ── STATE ────────────────────────────────────────────────────────────────────
+let activeSplit   = null;
+let selectedDay   = null;
+let selectedLevel = null;
+let pendingTemplate = null;
+let chosenDays    = [];
+let currentDaysNeeded = 0;
+let customCfg     = {};
 
-function chipText(k){const d=SPLIT[k];if(!d)return'Rest day';return d.label.split('—')[0].trim()}
-document.getElementById('today-chip').textContent=chipText(todayKey);
+// ── BOOT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem(STORE);
+  if (saved) { activeSplit = JSON.parse(saved); launchMain(); }
+  else showScreen('ob-screen');
+});
 
-function renderSwitcher(){
-  const el=document.getElementById('switcher');
-  el.innerHTML='';
-  ['MON','TUE','WED','THU','FRI','SAT','SUN'].forEach(d=>{
-    const btn=document.createElement('button');
-    btn.className='day-btn'+(d===selected?' active':'')+(!SPLIT[d]?' rest-day':'')+(d===todayKey?' today':'');
-    btn.innerHTML=`${d}<span class="dot"></span>`;
-    btn.onclick=()=>{selected=d;renderSwitcher();renderContent()};
-    el.appendChild(btn);
-    if(d===selected) setTimeout(()=>btn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}),60);
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── ONBOARDING ROUTES ────────────────────────────────────────────────────────
+function goLevel() {
+  renderLevelCards();
+  showScreen('level-screen');
+}
+
+function goCustom() {
+  renderCustomBlocks();
+  showScreen('custom-screen');
+}
+
+function goRandom() {
+  const t = RANDOM_TEMPLATES[Math.floor(Math.random()*RANDOM_TEMPLATES.length)];
+  pendingTemplate = t;
+  openDayPicker(t.name, t.structure, t.daysNeeded, 'ob-screen');
+}
+
+// ── LEVEL ────────────────────────────────────────────────────────────────────
+function renderLevelCards() {
+  const el = document.getElementById('level-cards');
+  el.innerHTML = '';
+  LEVELS.forEach(l => {
+    const div = document.createElement('div');
+    div.className = 'level-card' + (selectedLevel===l.id?' selected':'');
+    div.innerHTML = `
+      <div class="level-card-header">
+        <span class="level-name">${l.name}</span>
+        <span class="level-badge ${l.badge}">${l.name}</span>
+      </div>
+      <div class="level-desc">${l.desc}</div>
+      <div class="level-tags">${l.tags.map(t=>`<span class="level-tag">${t}</span>`).join('')}</div>`;
+    div.onclick = () => { selectedLevel = l.id; renderLevelCards(); };
+    el.appendChild(div);
   });
 }
 
-function loadImg(vid,tag,gif,fb){
-  // Use video element for autoplay on iOS Safari (avoids Low Power Mode block on img GIFs)
+function confirmLevel() {
+  if (!selectedLevel) { alert('Pick a level first.'); return; }
+  const l = LEVELS.find(x=>x.id===selectedLevel);
+  pendingTemplate = l;
+  openDayPicker(l.name+' Split', l.structure, l.daysNeeded, 'level-screen');
+}
+
+// ── DAY PICKER ───────────────────────────────────────────────────────────────
+let dayPickerBack = 'ob-screen';
+
+function openDayPicker(title, structure, daysNeeded, backScreen) {
+  dayPickerBack = backScreen;
+  chosenDays = [];
+  currentDaysNeeded = daysNeeded;
+  document.getElementById('day-screen-title').textContent = title;
+  document.getElementById('back-btn-day').setAttribute('onclick', `showScreen('${backScreen}')`);
+
+  // Split preview
+  const prev = document.getElementById('split-preview');
+  prev.innerHTML = `<div class="split-preview-title">Split structure (${daysNeeded} training days)</div>`
+    + structure.map((s,i)=>`<div class="split-row">
+        <span class="split-day-label">Day ${i+1}</span>
+        <span class="split-focus">${s.label}</span>
+        <span class="split-type-tag">${s.type==='strength'?'Str':'Hyp'}</span>
+      </div>`).join('');
+
+  // Day grid
+  renderDayGrid(daysNeeded);
+  showScreen('day-screen');
+}
+
+function renderDayGrid(daysNeeded) {
+  if (daysNeeded !== undefined) currentDaysNeeded = daysNeeded;
+  daysNeeded = currentDaysNeeded;
+  const el = document.getElementById('day-grid');
+  el.innerHTML = '';
+  DAYS.forEach(d => {
+    const on = chosenDays.includes(d);
+    const div = document.createElement('div');
+    div.className = 'day-toggle'+(on?' on':'');
+    div.innerHTML = `<span>${d.slice(0,2)}</span>`;
+    div.onclick = () => {
+      if (on) { chosenDays = chosenDays.filter(x=>x!==d); }
+      else if (chosenDays.length < daysNeeded) { chosenDays.push(d); }
+      renderDayGrid(daysNeeded);
+    };
+    el.appendChild(div);
+  });
+  document.querySelector('.day-picker-sub').textContent =
+    `Select exactly ${daysNeeded} day${daysNeeded>1?'s':''} — ${chosenDays.length}/${daysNeeded} chosen.`;
+}
+
+function confirmDays() {
+  const t = pendingTemplate;
+  const needed = t.daysNeeded || t.structure.length;
+  if (chosenDays.length !== needed) {
+    alert(`Please select exactly ${needed} training days.`); return;
+  }
+  // Sort chosen days in week order
+  const sorted = DAYS.filter(d=>chosenDays.includes(d));
+  const split = {};
+  DAYS.forEach(d => {
+    const idx = sorted.indexOf(d);
+    if (idx >= 0 && t.structure[idx]) {
+      const s = t.structure[idx];
+      split[d] = { label:s.label, type:s.type, exercises: s.keys.map(k=>EX[k]) };
+    } else {
+      split[d] = { label:'Rest', type:'rest', exercises:[] };
+    }
+  });
+  activeSplit = split;
+  localStorage.setItem(STORE, JSON.stringify(activeSplit));
+  launchMain();
+}
+
+// ── CUSTOM BUILDER ───────────────────────────────────────────────────────────
+const FOCUS_MAP = {
+  Push:['bench','ohp','incline','lateral','triext','pushdown','pecfly','dips'],
+  Pull:['pullup','bbrow','latpull','cablerow','facepull','bpcurl','hammer','revfly','chinup'],
+  Legs:['squat','rdl','legpress','legcurl','legext','hipthrust','lunge','calfstand','calfseated','plank'],
+  Upper:['bench','pullup','ohp','dips','chinup','facepull','incline','latpull','lateral','bpcurl'],
+  Lower:['squat','rdl','legpress','legcurl','legext','hipthrust','lunge','calfstand','calfseated'],
+  Chest:['bench','incline','pecfly','pushup','dips'],
+  Back:['pullup','bbrow','latpull','cablerow','dbrow','chinup'],
+  Shoulders:['ohp','lateral','facepull','revfly'],
+  Arms:['bpcurl','hammer','triext','pushdown','chinup','dips'],
+  'Full Body':['squat','bench','bbrow','ohp','rdl','plank'],
+};
+
+function renderCustomBlocks() {
+  const el = document.getElementById('custom-blocks');
+  el.innerHTML = '';
+  DAYS.forEach(d => {
+    if (!customCfg[d]) customCfg[d] = {rest:false,focus:'Push',type:'strength'};
+    const cfg = customCfg[d];
+    const div = document.createElement('div');
+    div.className = 'custom-day-block';
+    div.id = 'cb-'+d;
+    div.innerHTML = `
+      <div class="custom-day-header">
+        <div class="custom-day-name">${d}</div>
+        <div class="rest-toggle${cfg.rest?' rest-on':''}" onclick="toggleRest('${d}')">${cfg.rest?'Rest day ✓':'Set rest'}</div>
+      </div>
+      ${!cfg.rest?`
+      <div class="section-label">Focus</div>
+      <div class="focus-row">${FOCUS_OPTS.map(f=>`<div class="focus-chip${cfg.focus===f?' on':''}" onclick="setCustomFocus('${d}','${f}')">${f}</div>`).join('')}</div>
+      <div class="section-label">Type</div>
+      <div class="type-row">
+        <div class="type-chip${cfg.type==='strength'?' on':''}" onclick="setCustomType('${d}','strength')">Strength</div>
+        <div class="type-chip${cfg.type==='hypertrophy'?' on':''}" onclick="setCustomType('${d}','hypertrophy')">Hypertrophy</div>
+      </div>`:''}`;
+    el.appendChild(div);
+  });
+}
+
+function toggleRest(d) {
+  customCfg[d].rest = !customCfg[d].rest;
+  renderCustomBlocks();
+}
+function setCustomFocus(d,f) { customCfg[d].focus=f; renderCustomBlocks(); }
+function setCustomType(d,t)  { customCfg[d].type=t;  renderCustomBlocks(); }
+
+function saveCustom() {
+  const split = {};
+  DAYS.forEach(d => {
+    const cfg = customCfg[d];
+    if (cfg.rest) { split[d]={label:'Rest',type:'rest',exercises:[]}; return; }
+    const keys = (FOCUS_MAP[cfg.focus]||[]).slice(0,6);
+    split[d] = { label:cfg.focus, type:cfg.type, exercises: keys.map(k=>EX[k]).filter(Boolean) };
+  });
+  activeSplit = split;
+  localStorage.setItem(STORE, JSON.stringify(activeSplit));
+  launchMain();
+}
+
+// ── MAIN ─────────────────────────────────────────────────────────────────────
+function launchMain() {
+  document.getElementById('date-lbl').textContent =
+    new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+  const todayKey = JSDAYS[new Date().getDay()];
+  selectedDay = todayKey;
+  renderSwitcher();
+  renderContent();
+  showScreen('main-screen');
+}
+
+function renderSwitcher() {
+  const el = document.getElementById('switcher');
+  el.innerHTML = '';
+  const todayKey = JSDAYS[new Date().getDay()];
+  DAYS.forEach(d => {
+    const day = activeSplit[d];
+    const isRest = !day || day.type==='rest';
+    const btn = document.createElement('button');
+    btn.className='day-btn'+(d===selectedDay?' active':'')+(isRest?' rest-day':'')+(d===todayKey?' today':'');
+    btn.innerHTML=`${d.slice(0,2)}<span class="focus-lbl">${day&&day.type!=='rest'?day.label:''}</span><span class="dot"></span>`;
+    btn.onclick=()=>{selectedDay=d;renderSwitcher();renderContent()};
+    el.appendChild(btn);
+    if(d===selectedDay) setTimeout(()=>btn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}),60);
+  });
+}
+
+function renderContent() {
+  const el = document.getElementById('content');
+  const day = activeSplit[selectedDay];
+  const isRest = !day||day.type==='rest'||!day.exercises||!day.exercises.length;
+  if(isRest){
+    el.innerHTML=`<div class="rest-screen">
+      <div class="rest-icon">🌙</div>
+      <div class="rest-title">Rest day</div>
+      <div class="rest-sub">Recovery is where adaptation actually happens.</div>
+      <div class="rest-note">Sleep, eat, hydrate. Come back stronger.</div>
+    </div>`;return;
+  }
+  const typeLabel=day.type==='strength'?'Strength':'Hypertrophy';
+  el.innerHTML=`
+    <div class="session-hero">
+      <div class="session-hero-day">${selectedDay} · ${typeLabel}</div>
+      <div class="session-hero-name">${day.label}</div>
+      <div class="session-hero-chips">
+        <span class="hero-chip">${day.exercises.length} exercises</span>
+        <span class="hero-chip">${day.type==='strength'?'Heavy · Low reps':'Moderate · High reps'}</span>
+      </div>
+    </div>
+    <div class="grid">${day.exercises.map((ex,i)=>`
+      <div class="card" onclick="openPanel(${i})">
+        <div class="img-wrap">
+          <div class="placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2"><path d="M6.5 6.5h11M12 6.5V17M8 17h8"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <span class="tap-hint">Tap for details</span>
+          <video id="vid-${i}" autoplay muted loop playsinline disableRemotePlayback></video>
+        </div>
+        <div class="card-body">
+          <div class="card-info">
+            <div class="card-name">${ex.name}</div>
+            <div class="card-sets">${ex.sets}</div>
+          </div>
+          <span class="card-muscle-tag">${ex.muscle}</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  day.exercises.forEach((ex,i)=>{
+    const v=document.getElementById('vid-'+i);
+    if(v) loadMedia(v,ex.gif,ex.fb);
+  });
+}
+
+function loadMedia(vid,gif,fb){
   vid.src=gif;
-  vid.oncanplay=()=>{vid.classList.add('show');if(tag)tag.classList.add('show');vid.oncanplay=null};
+  vid.oncanplay=()=>{vid.classList.add('show');vid.oncanplay=null};
   vid.onerror=()=>{
-    // GIF failed — fall back to a regular img
     const img=document.createElement('img');
-    img.alt=vid.alt||'';
-    img.src=fb;
-    img.style.cssText=vid.style.cssText;
-    img.className=vid.className;
-    img.onload=()=>img.classList.add('show');
+    img.src=fb;img.onload=()=>img.classList.add('show');
     vid.parentNode.replaceChild(img,vid);
   };
   vid.load();
 }
 
-function renderContent(){
-  const el=document.getElementById('content');
-  const day=SPLIT[selected];
-  if(!day){
-    el.innerHTML=`<div class="rest-screen">
-      <div class="rest-icon">🌙</div>
-      <div class="rest-title">Rest day</div>
-      <div class="rest-sub">Recovery is where adaptation actually happens.</div>
-      <div class="rest-note">${REST_NOTES[selected]||'Rest and recover.'}</div>
-    </div>`;
-    return;
-  }
-  const bc=day.type==='strength'?'b-strength':'b-hyp';
-  const bl=day.type==='strength'?'Strength':'Hypertrophy';
-  el.innerHTML=`
-    <div class="session-meta">
-      <span class="session-name">${day.label}</span>
-      <span class="type-badge ${bc}">${bl}</span>
+// ── PANEL ────────────────────────────────────────────────────────────────────
+function openPanel(idx){
+  const ex=activeSplit[selectedDay].exercises[idx];
+  if(!ex)return;
+  document.getElementById('panel-body').innerHTML=`
+    <div class="panel-gif"><video autoplay muted loop playsinline disableRemotePlayback id="pvid"></video></div>
+    <div class="panel-ex-name">${ex.name}</div>
+    <div class="panel-sets">${ex.sets}</div>
+    <div class="panel-section">
+      <div class="panel-section-title">Muscles worked</div>
+      <div class="muscle-chips">
+        ${(ex.primary||[ex.muscle]).map(m=>`<span class="muscle-chip mp">${m}</span>`).join('')}
+        ${(ex.secondary||[]).map(m=>`<span class="muscle-chip ms">${m}</span>`).join('')}
+      </div>
     </div>
-    <div class="ex-count">${day.exercises.length} exercises</div>
-    <div class="grid">${day.exercises.map((ex,i)=>`
-      <div class="card">
-        <div class="img-wrap">
-          <div class="placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M12 6.5V17M8 17h8"/><circle cx="12" cy="12" r="10"/></svg></div>
-          <span class="gif-tag" id="tag-${i}">GIF</span>
-          <video id="img-${i}" autoplay muted loop playsinline disableRemotePlayback></video>
-        </div>
-        <div class="card-body">
-          <div class="card-name">${ex.name}</div>
-          <div class="card-foot">
-            <span class="card-sets">${ex.sets}</span>
-            <span class="card-muscle">${ex.muscle}</span>
-          </div>
-        </div>
-      </div>`).join('')}
-    </div>`;
-
-  day.exercises.forEach((ex,i)=>{
-    const img=document.getElementById('img-'+i);
-    const tag=document.getElementById('tag-'+i);
-    if(img) loadImg(img,tag,ex.gif,ex.fb);
-  });
+    <div class="panel-section">
+      <div class="panel-section-title">Where to feel it</div>
+      <div class="force-box"><p>${ex.cue||'Focus on the target muscle throughout the full range of motion.'}</p></div>
+    </div>
+    ${ex.steps?`<div class="panel-section">
+      <div class="panel-section-title">How to perform</div>
+      <ul class="steps">${ex.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join('')}</ul>
+    </div>`:''}`;
+  const pv=document.getElementById('pvid');
+  if(pv)loadMedia(pv,ex.gif,ex.fb);
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
 }
 
-renderSwitcher();
-renderContent();
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
 
-// Register service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/gym-split/sw.js')
-      .then(r => console.log('SW registered'))
-      .catch(e => console.log('SW failed:', e));
+let ty=0;
+document.getElementById('panel').addEventListener('touchstart',e=>{ty=e.touches[0].clientY});
+document.getElementById('panel').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-ty>80)closePanel()});
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/gym-split/sw.js').catch(()=>{});
   });
 }
 </script>
